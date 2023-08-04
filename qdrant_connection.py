@@ -38,21 +38,23 @@ class QDrantConnection(ExperimentalBaseConnection[QdrantClient]):
     return self.cursor().get_collection(collection_name=collection_name)
   
   # get collection with some filtering
-  def query(self, collection_name: str, query_vector: str, filter, ttl: int=3600, **kwargs):
+  def query(self, collection_name: str, query_vector: str, filter, ttl: int=3600, **kwargs) -> pd.DataFrame:
     @cache_data(ttl=ttl)
-    def _query(collection_name: str, query_vector: str, _filter, **kwargs):
+    def _query(collection_name: str, query_vector: str, _filter, **kwargs) -> pd.DataFrame:
       # default limit as 1
       limit = 1
 
       if('limit' in kwargs):
         limit = kwargs.pop('limit')
       
-      return self.cursor().search(
+      result = self.cursor().search(
         collection_name=collection_name,
         query_vector=query_vector,
         query_filter=_filter,
         limit=limit
       )
+
+      return pd.DataFrame(result)
     
     return _query(collection_name, query_vector, filter, **kwargs)
   

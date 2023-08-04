@@ -1,6 +1,7 @@
 import random
 
 import streamlit as st
+import pandas as pd
 
 from qdrant_client.models import Distance, VectorParams
 from qdrant_client.http.models import PointStruct, Filter, FieldCondition, MatchValue
@@ -29,13 +30,19 @@ def main():
   # add vectors to collection
   points = qdrant_addVectors(conn, collection_name, vector_size)
 
+  st.dataframe(pd.DataFrame(points).astype(str))
+
   # get collection
   collection = conn.get_collection(collection_name)
   print('-----\ncollection:')
   print(collection)
 
   # query with filtering
-  qdrant_filter(conn, collection_name, points[0].vector, vector_size)
+  result = qdrant_filter(conn, collection_name, points[0].vector, vector_size)
+  print('-----\nfilteredCollection: (' + str(len(result)) + ')')
+  print(result)
+
+  st.dataframe(result.astype(str))
 
 # demo code for adding vectors
 def qdrant_addVectors(conn, collection_name, vector_size):
@@ -95,6 +102,7 @@ def qdrant_addVectors(conn, collection_name, vector_size):
 # demo of filter capability
 def qdrant_filter(conn, collection_name, vector, vector_size):
   # build filter
+  # search of where city = london and vector is first vector from vectors
   filter = Filter(
     must=[
       FieldCondition(
@@ -104,12 +112,6 @@ def qdrant_filter(conn, collection_name, vector, vector_size):
     ]
   )
 
-  print('-----\nfilter:')
-  print(filter)
-
-  filteredCollection = conn.query(collection_name, vector, filter,
-    limit=vector_size)
-  print('-----\nfilteredCollection: (' + str(len(filteredCollection)) + ')')
-  print(filteredCollection)
+  return conn.query(collection_name, vector, filter, limit=vector_size)
 
 main()
