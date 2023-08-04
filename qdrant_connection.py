@@ -1,7 +1,7 @@
+import pandas as pd
+
 from streamlit.connections import ExperimentalBaseConnection
 from streamlit.runtime.caching import cache_data
-
-import pandas as pd
 
 from qdrant_client import QdrantClient
 
