@@ -1,5 +1,4 @@
 import random
-import json
 
 import streamlit as st
 
@@ -10,11 +9,7 @@ from qdrant_connection import QDrantConnection
 
 # qdrant connector demo code
 def main():
-  config = json.load(open('config.json'))
-
-  conn = st.experimental_connection('qdrant', type=QDrantConnection,
-    url=config['url'], api_key=config['api_key']
-  )
+  conn = st.experimental_connection('qdrant', type=QDrantConnection)
   print(conn)
 
   cursor = conn.cursor()

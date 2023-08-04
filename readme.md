@@ -1,14 +1,13 @@
 This project is a connector for Streamlit for Qdrant.
 
-# config.json
+# secrets.toml
 
-This project requires a `config.json` file in the top level directory of the project for storing the Qdrant `url` and `api_key`.
+This project requires a `secrets.toml` file in the top level directory of the project for storing the Qdrant `url` and `api_key`.
 
-The structure of the `config.json` should be as follows:
+The structure of the `secrets.toml` should be as follows:
 
-```json
-{
-  "url": "string"
-  "api_key": "string"
-}
+```toml
+[connections.qdrant]
+url = "string"
+api_key = "string"
 ```

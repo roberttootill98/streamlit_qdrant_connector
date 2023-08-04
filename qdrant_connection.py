@@ -8,10 +8,12 @@ from qdrant_client import QdrantClient
 client = QdrantClient(":memory:")
 
 class QDrantConnection(ExperimentalBaseConnection[QdrantClient]):
-  def _connect(self, **kwargs):
+  def _connect(self):
+    print(self._secrets)
+
     qdrant_client = QdrantClient(
-      url=kwargs.pop('url'),
-      api_key=kwargs.pop('api_key')
+      url=self._secrets['url'],
+      api_key=self._secrets['api_key']
     )
 
     # some error handling...
