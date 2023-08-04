@@ -24,7 +24,7 @@ class QDrantConnection(ExperimentalBaseConnection[QdrantClient]):
   def cursor(self) -> QdrantClient:
     return self.qdrant_client
   
-  # crete
+  # create
   def create_collection(self, collection_name: str, vectors_config):
     return self.cursor().recreate_collection(
       collection_name=collection_name,
